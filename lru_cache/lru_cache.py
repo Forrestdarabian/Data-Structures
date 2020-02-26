@@ -13,7 +13,7 @@ class LRUCache:
     def __init__(self, limit=10):
         self.limit = limit
         self.size = 0
-        self.order = DoublyLinkedList
+        self.order = DoublyLinkedList()
         self.storage = dict()
 
     """
@@ -25,10 +25,15 @@ class LRUCache:
     """
 
     def get(self, key):
+        # if key is in the storage
         if key in self.storage:
+            # helper function
             node = self.storage[key]
+            # move it to the end
             self.order.move_to_end(node)
+            # return the value
             return node.value[1]
+            # if not, return none
         else:
             return None
 
@@ -44,17 +49,27 @@ class LRUCache:
     """
 
     def set(self, key, value):
+        # check if key is in dict
         if key in self.storage:
+            # if it is then
             node = self.storage[key]
+            # overwrite the value
             node.value = (key, value)
+            # move it to the end
             self.order.move_to_end(node)
+            # exit function
             return
-
+        # if cache is full
         if self.size == self.limit:
+            # remove oldest entry from dictionary (which is the head)
             del self.storage[self.order.head.value[0]]
+            # and linked list
             self.order.remove_from_head()
             self.size -= 1
 
+        # add to the linked list (key and value)
         self.order.add_to_tail((key, value))
+        # add the key and value to the dictionary
         self.storage[key] = self.order.tail
+        # increment size
         self.size += 1
