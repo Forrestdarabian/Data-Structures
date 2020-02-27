@@ -1,7 +1,7 @@
+from dll_stack import Stack
+from dll_queue import Queue
 import sys
 sys.path.append('../queue_and_stack')
-from dll_queue import Queue
-from dll_stack import Stack
 
 
 class BinarySearchTree:
@@ -12,21 +12,53 @@ class BinarySearchTree:
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
+        # check if our nodes value is less than the current nodes value
+        if value < self.value:
+            # if it has a child to the left, place our new node there
+            if self.left is None:
+                self.left = BinarySearchTree(value)
+                # if it doesnt, repeat the process
+            else:
+                self.left.insert(value)
+                # same idea for right side except were checking if
+                #  the new nodes value is greater than or equal to the current nodes value
+        else:
+            if self.right is None:
+                self.right = BinarySearchTree(value)
+            else:
+                self.right.insert(value)
 
     # Return True if the tree contains the value
     # False if it does not
+
     def contains(self, target):
-        pass
+        if self.value == target:
+            return True
+        elif target < self.value and self.left is not None:
+            return self.left.contains(target)
+        elif target > self.value and self.right is not None:
+            return self.right.contains(target)
+        else:
+            return False
 
     # Return the maximum value found in the tree
+
     def get_max(self):
-        pass
+        if self.right is None:
+            return self.value
+        else:
+            return self.right.get_max()
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
     def for_each(self, cb):
-        pass
+        cb(self.value)
+        if self.left is not None:
+            return self.left.for_each(cb)
+        elif self.right is not None:
+            return self.right.for_each(cb)
+        else:
+            return None
 
     # DAY 2 Project -----------------------
 
